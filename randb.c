@@ -21,6 +21,8 @@
 
 #include "IRReception.h"
 #include "IREmission.h"
+#include "DataLength.h"
+
 
 char Txdata[50]; 
 
@@ -63,6 +65,7 @@ void initRandomNumberGenerator ()
 int main ( void )
 {
 	init_ports();
+	init_data_length();
 	/* Init I2C*/
 	init_I2C();
 	/* Init SPI*/

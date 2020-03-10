@@ -29,6 +29,10 @@ http://www.amazon.com/exec/obidos/ASIN/0387001638/thealgorithmrepo/
 
 #include "queue.h"
 
+int getQueueIndexArray(int frameDataLength){
+	return getFrameBits(frameDataLength) + (2 * EOT_LENGTH);
+}
+
 void init_queue(queue *q)
 {
         q->first = 0;
@@ -43,12 +47,14 @@ int QueueIn(queue *q, unsigned int *x)
 	}
   	else {
 		int i;
-		int aux[QUEUEINDEXARRAY];
+		int queueIndexArray = getQueueIndexArray(get_data_length());
+		int aux[queueIndexArray];
         q->last = (q->last+1) % QUEUESIZE;
-		for ( i = 0 ; i < QUEUEINDEXARRAY ; i ++){
+		for ( i = 0 ; i < queueIndexArray ; i ++){
         	q->q[ q->last ][i] = x[i];    	
 			aux[i] = x[i];
 		}
+		
 
         q->count = q->count + 1;
 		return TRUE;
@@ -63,7 +69,8 @@ int QueueOut(queue *q, unsigned int* x)
 		return FALSE;
 	}
     else {
-		for ( i = 0; i< QUEUEINDEXARRAY; i++){
+		int queueIndexArray = getQueueIndexArray(get_data_length());
+		for ( i = 0; i< queueIndexArray; i++){
 			x[i]=q->q[ q->first ][i];
 		}
         q->first = (q->first+1) % QUEUESIZE;

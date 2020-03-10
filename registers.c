@@ -6,7 +6,8 @@
 
 dataRegisterReceived lastDataReceived;
 dataRegisterReceived allDataReceived[NUM_RECEPTOR_SENSORS];
-unsigned int dataReceivedToSend;
+//unsigned int dataReceivedToSend;
+unsigned long dataReceivedToSend;
 unsigned char flagDataToSend;
 
 modelledDataRegisterReceived modelDataReceived;
@@ -44,7 +45,8 @@ void setDataReceived( dataRegisterReceived data){
 	/*************** END DEBUG *****************/
 }
 
-void setAllDataReceived ( dataRegisterReceived *Alldata, unsigned int data ){
+//void setAllDataReceived ( dataRegisterReceived *Alldata, unsigned int data ){
+void setAllDataReceived ( dataRegisterReceived *Alldata, unsigned long data ){
 	int i;
 	for ( i = 0 ; i < NUM_RECEPTOR_SENSORS ; i++){
 		allDataReceived[i] = Alldata[i];
@@ -77,7 +79,8 @@ void getDataReceived (dataRegisterReceived *data){
 	*data = lastDataReceived;
 }
 
-unsigned char getAllDataReceived ( dataRegisterReceived *Alldata, unsigned int *data){
+//unsigned char getAllDataReceived ( dataRegisterReceived *Alldata, unsigned int *data){
+unsigned char getAllDataReceived ( dataRegisterReceived *Alldata, unsigned long *data){
 	if ( flagDataToSend == TRUE ) 
 	{
 		int i;

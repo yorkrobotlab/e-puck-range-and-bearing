@@ -400,9 +400,19 @@ void ManageUart1Reception ( void )
 
 		if ( action <= 18 )
 		{
-			unsigned int value1,value2,auxValue;
-			QueueOutSingle(&UartRxReception,&value1);
-			QueueOutSingle(&UartRxReception,&value2);
+			//unsigned int value1,value2,auxValue;
+			unsigned int value1,value2,value3,value4 =0;
+			unsigned long auxValue;
+			if(get_data_length() >= 32){
+				QueueOutSingle(&UartRxReception,&value1);
+			}
+			if(get_data_length() >= 24){
+				QueueOutSingle(&UartRxReception,&value2);
+			}
+			if(get_data_length() >= 16){
+				QueueOutSingle(&UartRxReception,&value3);
+			}			
+			QueueOutSingle(&UartRxReception,&value4);
 
 			switch (action)
 			{
@@ -435,7 +445,8 @@ void ManageUart1Reception ( void )
 					/* DEBUG */
 					break;
 				case 14:
-					auxValue = (value1 << 8 ) + (value2 & 0xFF);
+					//auxValue = (value1 << 8 ) + (value2 & 0xFF);
+					auxValue = ((unsigned long)value1 << 24 ) + ((unsigned long)value2 << 16 ) + (value3 << 8 ) + (value4 & 0xFF);
 					WriteAllIrData( auxValue );
 					/* DEBUG */
 					//sprintf(TxData,"AllIrData %u \n\r",auxValue);
@@ -448,7 +459,8 @@ void ManageUart1Reception ( void )
 				default:
 					if(action < 12)	
 					{
-						auxValue = (value1 << 8 ) + (value2 & 0xFF);
+						//auxValue = (value1 << 8 ) + (value2 & 0xFF);
+						auxValue = ((unsigned long)value1 << 24 ) + ((unsigned long)value2 << 16 ) + (value3 << 8 ) + (value4 & 0xFF);
 						StoreIrData(action,auxValue);
 						/* DEBUG */
 						//sprintf(TxData,"StoreIrData %u %d \n\r ",auxValue, action);

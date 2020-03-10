@@ -28,18 +28,21 @@ http://www.amazon.com/exec/obidos/ASIN/0387001638/thealgorithmrepo/
 #include "registers.h"
 
 #include "ports.h"
+#include "DataLength.h"
 
 
 #define QUEUESIZE       	10
-//#define QUEUEINDEXARRAY	2*FRAME_BITS
-#define QUEUEINDEXARRAY		FRAME_BITS + (2 * EOT_LENGTH)
+#define QUEUEINDEXARRAY_32		FRAME_BITS_32 + (2 * EOT_LENGTH)
 #define QUEUESIZESINGLE     110
 #define QUEUESIZEFINAL     	10
 #define QUEUESIZEMULTIPLE   1
 
 
+int getQueueIndexArray(int frameDataLength);
+
+
 typedef struct {
-        int q[QUEUESIZE+1][QUEUEINDEXARRAY];	/* body of queue */
+		int q[QUEUESIZE+1][QUEUEINDEXARRAY_32];	/* body of queue */
         int first;                      		/* position of first element */
         int last;                       		/* position of last element */
         int count;                      		/* number of queue elements */
@@ -50,6 +53,7 @@ void init_queue(queue *q);
 int QueueIn(queue *q, unsigned int *x);
 int QueueOut(queue *q, unsigned int *value);
 int QueueEmpty(queue *q);
+
 
 typedef struct {
         unsigned int q[QUEUESIZESINGLE+1];		/* body of queue */

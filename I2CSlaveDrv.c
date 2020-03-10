@@ -14,6 +14,7 @@
 #include "IREmission.h"
 #include "IRReception.h"
 #include "SPIMasterDrv.h"
+#include "DataLength.h"
 
 
 #define WAITING 		0
@@ -22,13 +23,17 @@
 #define READ_STRING		3
 
 dataRegisterReceived dataAll[12];
-unsigned int maxData;
+//unsigned int maxData;
+unsigned long maxData;
 finalDataRegister finalData;
 
-unsigned char auxValue=0;
-
+//unsigned char auxValue=0;
+unsigned long auxValue=0;
+unsigned char counter;
 //Functions prototype
 void init_I2C(){
+	
+	counter=0;
 	/* Enable I2C Module */
 	I2C1CONbits.I2CEN = 1;
 	/* 7 bit Address */
@@ -53,10 +58,28 @@ void init_I2C(){
 
 
 //unsigned char address, mode, register_add, new_command, indexer;
-unsigned char address, mode, register_add, indexer;
+unsigned char address, mode, register_add, register_add2, indexer;
+unsigned char kk[200];
 
 void __attribute__((interrupt,no_auto_psv)) _SI2C1Interrupt(void)
 {
+	/* Address Matched */
+/*	if (counter < 199 ) {
+	//	if(I2C1STATbits.D_A == 0)	
+	//	{
+			kk[counter] = I2C1RCV;
+			// Release SCL1 line 
+			I2C1CONbits.SCLREL = 1;	
+			IFS1bits.SI2C1IF = 0;
+			counter++;
+	//	}
+	}
+	else
+	{
+		counter++;
+		counter = 0;
+	}
+*/
 
 	/* Address Matched */
 	if(I2C1STATbits.D_A == 0)	
@@ -87,7 +110,7 @@ void __attribute__((interrupt,no_auto_psv)) _SI2C1Interrupt(void)
 		if (mode == WRITE_ADD)		
 		{	
 			/* Save Register Address */
-			register_add = I2C1RCV; 
+			register_add = I2C1RCV; 		
 			/* Release SCL1 line, because stretching is enabled */
 			I2C1CONbits.SCLREL = 1;	
 			/* Next Mode in writing data for next interrupt */
@@ -139,6 +162,14 @@ char read_register(char reg_add)
 		case 2:
 			return ( finalData.data & 0xFF );
 			break;
+		// Added for 32 bit payload
+		case 10:
+			return ( ( finalData.data >> 24 ) & 0xFF );
+			break;
+		case 11:
+			return ( ( finalData.data >> 16 ) & 0xFF );
+			break;
+
 		case 3:
 			return ( ( finalData.bearing >> 8 ) & 0xFF );
 			break;
@@ -265,7 +296,20 @@ void write_register(char reg_add, unsigned char value)
 		case 14:
 			WriteAllIrData( (auxValue << 8) + value );
 			break;
-		
+		// Added for 32 bit payload
+		case 19:
+			auxValue = ((auxValue << 8) + value );
+			break;
+		case 20:
+			auxValue = ((auxValue << 8) + value );
+			break;
+
+		// Added to set the payload size from the epuck
+		case 21:
+			set_data_length(value);
+			break;
+
+		//
 		/* Send Value */
 		case 15:
 			WriteIrData();

@@ -12,10 +12,11 @@
 #include "ports.h"
 #include "queue.h"
 #include "stdlib.h"
+#include "DataLength.h"
 
 char FrameToSend = FALSE;
 int bufferIndex = 0;
-unsigned int bufferEmission[FRAME_BITS];
+unsigned int bufferEmission[FRAME_BITS_32];
 
 queue queueEmission;
 
@@ -111,7 +112,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 	aux = EMPort;
 	/* Mask Port with no emission used bits */
 	aux &= 0x00C6;	
-
+	int frame_bits = getFrameBits(get_data_length());
 
 	if(FrameToSend == TRUE){
 		/* Load Value to Send */
@@ -119,7 +120,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 		/* Increase Pointer */
 		bufferIndex++;
 		/* If Frame finished Clear FrameToSend Flag*/
-		if(bufferIndex == FRAME_BITS){
+		if(bufferIndex == frame_bits){
 			bufferIndex = 0;
 			FrameToSend = FALSE;
 		}
@@ -141,6 +142,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 				CSMAcounter--;
 			}
 		#else
+
 			FrameToSend = GetEmissionFrame(bufferEmission);
 			/*************** DEBUG RS232 - PC *****************/
 			//if(FrameToSend==TRUE)
@@ -160,10 +162,18 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 	IFS0bits.T1IF = 0;
 }
 
+int getFrameBits(int frameDataLength){
+	return 2*(HEADER_LENGTH + frameDataLength + CRC_LENGTH);
+}
+
 char GetEmissionFrame ( unsigned int *frame ){
 	return QueueOut(&queueEmission,frame);
 }
 
 char SetEmissionFrame ( unsigned int *frame){
 	return QueueIn(&queueEmission,frame);
+}
+
+void re_init_queue_emission(){
+	init_queue(&queueEmission);
 }

@@ -12,7 +12,8 @@ typedef struct{
 	int received;			/* If data has been received */
 	int alpha;				/* Angle to the source */
 	unsigned int distance;	/* Distance to the source */
-	int data; 				/* Data received */
+	//int data; 				/* Data received */
+	unsigned long data; 				/* Data received */
 } dataCompleated;
 
 void init_Reception ( void );
