@@ -37,9 +37,7 @@ http://www.amazon.com/exec/obidos/ASIN/0387001638/thealgorithmrepo/
 #define QUEUESIZEFINAL     	10
 #define QUEUESIZEMULTIPLE   1
 
-
 int getQueueIndexArray(int frameDataLength);
-
 
 typedef struct {
 		int q[QUEUESIZE+1][QUEUEINDEXARRAY_32];	/* body of queue */
@@ -53,7 +51,6 @@ void init_queue(queue *q);
 int QueueIn(queue *q, unsigned int *x);
 int QueueOut(queue *q, unsigned int *value);
 int QueueEmpty(queue *q);
-
 
 typedef struct {
         unsigned int q[QUEUESIZESINGLE+1];		/* body of queue */

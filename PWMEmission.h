@@ -18,7 +18,6 @@
 #define CRC_LENGTH 4
 #define EOT_LENGTH 2
 
-
 /* TOTAL NUMBER OF BITS */
 #define FRAME_BITS_32 2*(HEADER_LENGTH + FRAME_DATA_LENGTH_32 + CRC_LENGTH)
 
@@ -28,9 +27,6 @@ void init_T1( void );
 void init_Emmision( void );
 char GetEmissionFrame ( unsigned int *frame );
 char SetEmissionFrame ( unsigned int *frame);
-
 int getFrameBits(int frameDataLength);
-
 void __attribute__((__interrupt__)) _T2Interrupt( void );
-
 void re_init_queue_emission();

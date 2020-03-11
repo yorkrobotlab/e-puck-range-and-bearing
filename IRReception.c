@@ -19,7 +19,6 @@ int dataInput;
 int dataInputOld[NUM_RECEPTOR_SENSORS];
 int countBits[NUM_RECEPTOR_SENSORS];
 int countFrame[NUM_RECEPTOR_SENSORS];
-//unsigned int receivedData[NUM_RECEPTOR_SENSORS];
 unsigned long receivedData[NUM_RECEPTOR_SENSORS];
 int crcCalc[NUM_RECEPTOR_SENSORS];
 int crcReceived[NUM_RECEPTOR_SENSORS];
@@ -38,10 +37,12 @@ int counterPreambleStart;
 int counterDisable;
 int NEXT[NUM_RECEPTOR_SENSORS];
 int received;
-//unsigned int dataReceived;
 unsigned long dataReceived;
 
-int SensorAngle[] = {15,50,75,105,133,159,-165,-135,-105,-77,-50,-15};double CosSensorAngle[] = {0.965926,0.642788,0.258819,-0.258819,-0.681998,-0.93358,-0.965926,-0.707107,-0.258819,0.224951,0.642788,0.965926};double SinSensorAngle[] = {0.258819,0.766044,0.965926,0.965926,0.731354,0.358368,-0.258819,-0.707107,-0.965926,-0.97437,-0.766044,-0.258819};double SensorAngleRads[] = {0.261799,0.872665,1.308997,1.832596,2.321288,2.775073,-2.879793,-2.356194,-1.832596,-1.343903,-0.872665,-0.261799};
+int SensorAngle[] = {15,50,75,105,133,159,-165,-135,-105,-77,-50,-15};
+double CosSensorAngle[] = {0.965926,0.642788,0.258819,-0.258819,-0.681998,-0.93358,-0.965926,-0.707107,-0.258819,0.224951,0.642788,0.965926};
+double SinSensorAngle[] = {0.258819,0.766044,0.965926,0.965926,0.731354,0.358368,-0.258819,-0.707107,-0.965926,-0.97437,-0.766044,-0.258819};
+double SensorAngleRads[] = {0.261799,0.872665,1.308997,1.832596,2.321288,2.775073,-2.879793,-2.356194,-1.832596,-1.343903,-0.872665,-0.261799};
 
 dataRegisterReceived dataCompleatedIteration[NUM_RECEPTOR_SENSORS];
 //dataRegisterReceived dataCompleatedIterationToSend[NUM_RECEPTOR_SENSORS];
@@ -497,7 +498,6 @@ void DecodeData ( void ) {
 		/*************** END DEBUG *****************/
 		received = 0;
 		int frame_data_length = get_data_length();
-
 		/* Read the data related to the sensor */
 		/* Switch the state in which the specific sensor is */
 		switch(state)
@@ -569,11 +569,8 @@ void DecodeData ( void ) {
 							if ( dataInput != dataInputOld[i])
 							{
 								/* add to the data value */
-								//receivedData[i]+=( dataInput << ( FRAME_DATA_LENGTH - countFrame[i]) );	
 								// Now that the FRAME_DATA_LENGTH is 32 we need a long to contain the bits
-								receivedData[i]+=( (long)dataInput << ( frame_data_length - countFrame[i]) );	
-								//receivedData[i]+=( (long)dataInput << ( FRAME_DATA_LENGTH - countFrame[i]) );	
-									
+								receivedData[i]+=( (long)dataInput << ( frame_data_length - countFrame[i]) );
 								/* Decrease the number of frames till the end of data*/
 								countFrame[i]--;
 								/* Store the value for the crc check */
@@ -679,7 +676,6 @@ void DecodeData ( void ) {
 							countBits[i] = 0;
 							/* Prepare data frame for data reception */
 							countFrame[i] = frame_data_length;
-							//countFrame[i] = FRAME_DATA_LENGTH;
 							/* Return to heading state */
 							//state = STATE_HEADER;
 							//DisableIrPeak(i);

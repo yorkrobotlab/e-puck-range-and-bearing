@@ -142,7 +142,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 				CSMAcounter--;
 			}
 		#else
-
 			FrameToSend = GetEmissionFrame(bufferEmission);
 			/*************** DEBUG RS232 - PC *****************/
 			//if(FrameToSend==TRUE)

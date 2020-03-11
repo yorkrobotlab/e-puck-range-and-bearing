@@ -7,10 +7,8 @@
 
 /* Store and Write the IR data sent to all the sensors. The same for all*/
 void WriteAllIrData ( unsigned long data);
-//void WriteAllIrData ( unsigned int data);
 /* Store IR data on each specific channel */
 void StoreIrData ( int channel, unsigned long data);
-//void StoreIrData ( int channel, unsigned int data);
 /*Send the loaded values */
 void WriteIrData ( void );
 

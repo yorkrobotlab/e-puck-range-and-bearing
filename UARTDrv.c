@@ -400,7 +400,6 @@ void ManageUart1Reception ( void )
 
 		if ( action <= 18 )
 		{
-			//unsigned int value1,value2,auxValue;
 			unsigned int value1,value2,value3,value4 =0;
 			unsigned long auxValue;
 			if(get_data_length() >= 32){
@@ -445,7 +444,6 @@ void ManageUart1Reception ( void )
 					/* DEBUG */
 					break;
 				case 14:
-					//auxValue = (value1 << 8 ) + (value2 & 0xFF);
 					auxValue = ((unsigned long)value1 << 24 ) + ((unsigned long)value2 << 16 ) + (value3 << 8 ) + (value4 & 0xFF);
 					WriteAllIrData( auxValue );
 					/* DEBUG */
@@ -459,7 +457,6 @@ void ManageUart1Reception ( void )
 				default:
 					if(action < 12)	
 					{
-						//auxValue = (value1 << 8 ) + (value2 & 0xFF);
 						auxValue = ((unsigned long)value1 << 24 ) + ((unsigned long)value2 << 16 ) + (value3 << 8 ) + (value4 & 0xFF);
 						StoreIrData(action,auxValue);
 						/* DEBUG */

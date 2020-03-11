@@ -53,8 +53,7 @@ int QueueIn(queue *q, unsigned int *x)
 		for ( i = 0 ; i < queueIndexArray ; i ++){
         	q->q[ q->last ][i] = x[i];    	
 			aux[i] = x[i];
-		}
-		
+		}	
 
         q->count = q->count + 1;
 		return TRUE;

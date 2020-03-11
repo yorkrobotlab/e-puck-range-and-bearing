@@ -23,7 +23,6 @@
 #include "IREmission.h"
 #include "DataLength.h"
 
-
 char Txdata[50]; 
 
 /* Configure CLOCK */
